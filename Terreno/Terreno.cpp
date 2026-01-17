@@ -134,6 +134,11 @@ void Terreno::draw()
     glDrawElementsInstanced(GL_TRIANGLES, sizeof(indices) / sizeof(unsigned int), GL_UNSIGNED_INT, 0, numIstanze);
 }
 
+GLuint Terreno::getShader()
+{
+    return ourShader.ID;
+}
+
 void Terreno::Delete() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &quadVBO);

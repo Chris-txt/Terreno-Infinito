@@ -29,8 +29,8 @@ private:
     Camera* cam = nullptr;
     glm::ivec2 quadAttuale;
 
-    int GRID_X = 70;
-    int GRID_Z = 70;
+    int GRID_X = 40;
+    int GRID_Z = 40;
     int numIstanze = GRID_X * GRID_Z;
 
     unsigned int instanceVBO;
@@ -40,6 +40,7 @@ public:
     void generaTerreno();
 
     void draw();
+    GLuint getShader();
 
     void Delete();
     ~Terreno();

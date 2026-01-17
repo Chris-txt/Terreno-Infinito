@@ -8,6 +8,7 @@
 #include <iostream>
 #include <Windows.h>
 
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 
 // settings
@@ -19,7 +20,6 @@ int main()
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Infinite Grass", NULL, NULL);
@@ -30,6 +30,7 @@ int main()
         return -1;
     }
     glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     // glad: load all OpenGL function pointers
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -64,13 +65,17 @@ int main()
         ter.generaTerreno();
 
         // render
-        glClearColor(0.0f, 0.6f, 0.9f, 1.0f);
+        //fog color = 0.902f, 0.871f, 0.945f
+        glm::vec3 skyColor = glm::vec3(0.0f, 0.6f, 0.9f);
+        glClearColor(skyColor.r,skyColor.g,skyColor.b, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
+        //glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(CameraMatrix));
+        glUniform3f(glGetUniformLocation(ter.getShader(), "fogColor"), skyColor.r,skyColor.g,skyColor.b);
         //camera update
         camera.Input(window);
         //aggiorna e esporta la matrice della camera al vertex shader
-        camera.updateMatrix(50.0f, 0.1f, 600.0f);
+        camera.updateMatrix(50.0f, 0.1f, 500.0f);
 
         ter.draw();
 
@@ -87,6 +92,11 @@ int main()
 
     glfwTerminate();
     return 0;
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
 }
 
 void processInput(GLFWwindow* window)

@@ -4,11 +4,13 @@ layout (location = 1) in vec2 aTex;
 layout (location = 2) in vec3 aOffset;
 
 out vec2 texCoord;
+out float vDistance;
 
 uniform mat4 camMatrix;
 
 void main()
 {
 	gl_Position = camMatrix * vec4(aPos + aOffset, 1.0);
+	vDistance = length((camMatrix * vec4(aPos + aOffset, 1.0)).xyz);
 	texCoord = aTex;
 }
