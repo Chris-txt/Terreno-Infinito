@@ -66,7 +66,8 @@ int main()
 
         // render
         //fog color = 0.902f, 0.871f, 0.945f
-        glm::vec3 skyColor = glm::vec3(0.0f, 0.6f, 0.9f);
+        //sky color = 0.0f, 0.6f, 0.9f
+        glm::vec3 skyColor = glm::vec3(0.529, 0.808, 0.922);
         glClearColor(skyColor.r,skyColor.g,skyColor.b, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         

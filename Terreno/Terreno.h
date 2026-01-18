@@ -29,8 +29,8 @@ private:
     Camera* cam = nullptr;
     glm::ivec2 quadAttuale;
 
-    int GRID_X = 40;
-    int GRID_Z = 40;
+    int GRID_X = 80;
+    int GRID_Z = 80;
     int numIstanze = GRID_X * GRID_Z;
 
     unsigned int instanceVBO;
