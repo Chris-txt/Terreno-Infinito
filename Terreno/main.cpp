@@ -5,6 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Terreno.h"
+#include "Struttura.h"
 #include <iostream>
 #include <Windows.h>
 
@@ -17,6 +18,8 @@ const unsigned int SCR_HEIGHT = 700;
 
 int main()
 {
+    srand(time(NULL));
+
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -44,6 +47,7 @@ int main()
 
     //terreno
     Terreno ter(&camera);
+    Struttura struc;
 
     glEnable(GL_DEPTH_TEST);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -79,6 +83,7 @@ int main()
         camera.updateMatrix(50.0f, 0.1f, 500.0f);
 
         ter.draw();
+        struc.draw();
 
         //cambia i buffer
         glfwSwapBuffers(window);
@@ -90,6 +95,7 @@ int main()
 
     //elimina le risorse che non servono più
     ter.Delete();
+    struc.Delete();
 
     glfwTerminate();
     return 0;

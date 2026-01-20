@@ -149,11 +149,13 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="stb.cpp" />
+    <ClCompile Include="Struttura.cpp" />
     <ClCompile Include="Terreno.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Struttura.h" />
     <ClInclude Include="Terreno.h" />
   </ItemGroup>
   <ItemGroup>

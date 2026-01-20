@@ -44,7 +44,7 @@ Terreno::Terreno(Camera* mainCamera)
     glEnableVertexAttribArray(1);
 
     //instance
-    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO); // this attribute comes from a different vertex buffer
+    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(2);
     glBindBuffer(GL_ARRAY_BUFFER, 0);

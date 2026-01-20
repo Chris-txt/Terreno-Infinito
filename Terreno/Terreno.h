@@ -2,7 +2,6 @@
 #define TERRENO_CLASS_H
 
 #include <stb/stb_image.h>
-#include "Shader.h"
 #include "Camera.h"
 
 static GLfloat vertices[] =
