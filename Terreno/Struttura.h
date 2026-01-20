@@ -6,37 +6,69 @@
 #include <glm/glm.hpp>
 
 static GLfloat structureVert[] = {
-//     COORDINATES      /   TexCoord  //
+//          COORDINATE     /    TexCoord  //
+    //+Z
     -10.0f,  0.0f,   10.0f,     0.0f, 0.0f, //0
-    -10.0f,  0.0f,  -10.0f,     0.0f, 0.0f, //1
-     10.0f,  0.0f,   10.0f,     1.0f, 0.0f, //2
-     10.0f,	 0.0f,  -10.0f,     1.0f, 0.0f, //3
+     10.0f,  0.0f,   10.0f,     1.0f, 0.0f, //1
+    -10.0f, 200.0f,  10.0f,     0.0f, 7.0f, //2
+     10.0f, 200.0f,  10.0f,     1.0f, 6.0f, //3
 
-    -10.0f, 100.0f,  10.0f,    0.0f, 5.0f, //4
-    -10.0f, 100.0f, -10.0f,    0.0f, 5.0f, //5
-     10.0f, 100.0f,  10.0f,    1.0f, 5.0f, //6
-     10.0f, 100.0f, -10.0f,    1.0f, 5.0f  //7
+    //-Z
+     10.0f,  0.0f,  -10.0f,     0.0f, 0.0f, //4
+    -10.0f,  0.0f,  -10.0f,     1.0f, 0.0f, //5
+     10.0f, 200.0f, -10.0f,     0.0f, 7.0f, //6
+    -10.0f, 200.0f, -10.0f,     1.0f, 7.0f, //7
+
+    //-X
+    -10.0f,  0.0f,  -10.0f,     0.0f, 0.0f, //8
+    -10.0f,  0.0f,   10.0f,     1.0f, 0.0f, //9
+    -10.0f, 200.0f, -10.0f,     0.0f, 7.0f, //10
+    -10.0f, 200.0f,  10.0f,     1.0f, 7.0f, //11
+
+    //+X
+     10.0f,  0.0f,   10.0f,     0.0f, 0.0f, //12
+     10.0f,  0.0f,  -10.0f,     1.0f, 0.0f, //13
+     10.0f, 200.0f,  10.0f,     0.0f, 7.0f, //14
+     10.0f, 200.0f, -10.0f,     1.0f, 7.0f, //15
+
+    //Y = 200
+    -10.0f, 200.0f,  10.0f,     0.0f, 0.0f, //16
+    -10.0f, 200.0f, -10.0f,     0.0f, 1.0f, //17
+     10.0f, 200.0f,  10.0f,     1.0f, 0.0f, //18
+     10.0f, 200.0f, -10.0f,     1.0f, 1.0f, //19
+
+    //Y = 0
+    -10.0f,   0.0f,  10.0f,     0.0f, 0.0f, //20
+     10.0f,   0.0f,  10.0f,     1.0f, 0.0f, //21
+    -10.0f,   0.0f, -10.0f,     0.0f, 1.0f, //22
+     10.0f,   0.0f, -10.0f,     1.0f, 1.0f  //23
 };
 
 static GLuint structureInd[] =
 {
-	0, 1, 2,
-	1, 3, 2,
+    //fronte
+    0, 1, 2,
+    1, 3, 2,
 
-	4, 6, 5,
-	6, 7, 5,
+    //retro
+    4, 5, 6,
+    5, 7, 6,
 
-	0, 2, 4,
-	2, 6, 4,
+    //sinistra
+    8, 9, 10,
+    9, 11, 10,
 
-	3, 1, 7,
-	1, 5, 7,
+    //destra
+    12, 13, 14,
+    13, 15, 14,
 
-	1, 0, 5,
-	0, 4, 5,
+    //cima
+    16, 17, 18,
+    17, 19, 18,
 
-	2, 3, 6,
-	3, 7, 6
+    //fondo
+    20, 21, 22,
+    21, 23, 22
 };
 
 class Struttura
@@ -44,14 +76,15 @@ class Struttura
 private:
 	unsigned int VAO, VBO, EBO;
 	unsigned int instanceVBO;
-	int numIstanze = 500;
+	unsigned int texture;
 
+	int numIstanze = 500;
 	glm::vec3* posizioni = nullptr;
 public:
-	Struttura();
+	Struttura(GLuint shader);
 
 	void update();
-	void draw();
+	void draw(GLuint shader);
 	void Delete();
 
 	~Struttura();

@@ -163,6 +163,7 @@
     <None Include="default.vert" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="concrete.jpg" />
     <Image Include="grass.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

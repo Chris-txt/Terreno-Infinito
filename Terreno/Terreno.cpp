@@ -55,6 +55,10 @@ Terreno::Terreno(Camera* mainCamera)
     stbi_set_flip_vertically_on_load(true);
     unsigned char* bytes = stbi_load("grass.jpg", &widthImg, &heightImg, &numColCh, 0);
 
+    if (bytes == nullptr) {
+        std::cout << "Failed to load texture 'grass.jpg': " << stbi_failure_reason() << std::endl;
+    }
+
     glGenTextures(1, &texture);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -66,14 +70,8 @@ Terreno::Terreno(Camera* mainCamera)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, widthImg, heightImg, 0, GL_RGB, GL_UNSIGNED_BYTE, bytes);
-    glGenerateMipmap(GL_TEXTURE_2D);
 
-    stbi_image_free(bytes);
     glBindTexture(GL_TEXTURE_2D, 0);
-
-    GLuint tex0Uni = glGetUniformLocation(ourShader.ID, "tex0");
-    ourShader.Activate();
-    glUniform1f(tex0Uni, 0);
 }
 
 void Terreno::generaTerreno()
@@ -128,10 +126,14 @@ void Terreno::draw()
     glUniform3f(glGetUniformLocation(ourShader.ID, "camPos"), cam->Position.x, cam->Position.y, cam->Position.z);
     cam->Matrix(ourShader, "camMatrix");
 
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glUniform1i(glGetUniformLocation(ourShader.ID, "tex0"), 0);
     glBindVertexArray(VAO);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
     // disegnare con intanceed richiede il numero di istanze
     glDrawElementsInstanced(GL_TRIANGLES, sizeof(indices) / sizeof(unsigned int), GL_UNSIGNED_INT, 0, numIstanze);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 GLuint Terreno::getShader()
@@ -144,6 +146,7 @@ void Terreno::Delete() {
     glDeleteBuffers(1, &quadVBO);
     glDeleteBuffers(1, &EBO);
     glDeleteBuffers(1, &instanceVBO);
+    glDeleteTextures(1, &texture);
     ourShader.Delete();
 }
 

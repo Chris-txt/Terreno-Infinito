@@ -47,7 +47,7 @@ int main()
 
     //terreno
     Terreno ter(&camera);
-    Struttura struc;
+    Struttura struc(ter.getShader());
 
     glEnable(GL_DEPTH_TEST);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -75,7 +75,6 @@ int main()
         glClearColor(skyColor.r,skyColor.g,skyColor.b, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        //glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(CameraMatrix));
         glUniform3f(glGetUniformLocation(ter.getShader(), "fogColor"), skyColor.r,skyColor.g,skyColor.b);
         //camera update
         camera.Input(window);
@@ -83,7 +82,7 @@ int main()
         camera.updateMatrix(50.0f, 0.1f, 500.0f);
 
         ter.draw();
-        struc.draw();
+        struc.draw(ter.getShader());
 
         //cambia i buffer
         glfwSwapBuffers(window);
@@ -94,8 +93,8 @@ int main()
     }
 
     //elimina le risorse che non servono più
-    ter.Delete();
     struc.Delete();
+    ter.Delete();
 
     glfwTerminate();
     return 0;
