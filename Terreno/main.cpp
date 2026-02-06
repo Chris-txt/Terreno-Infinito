@@ -4,8 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Terreno.h"
-#include "Struttura.h"
+#include "Mondo.h"
 #include <iostream>
 #include <Windows.h>
 
@@ -25,6 +24,7 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+    //crea la finestra
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Infinite Grass", NULL, NULL);
     if (window == NULL)
     {
@@ -35,7 +35,7 @@ int main()
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    // glad: load all OpenGL function pointers
+    //carica glad
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
@@ -46,14 +46,13 @@ int main()
     Camera camera(SCR_WIDTH, SCR_HEIGHT, glm::vec3(0.0f, 4.0f, -2.0f));
 
     //terreno
-    Terreno ter(&camera);
-    Struttura struc(ter.getShader());
+    Mondo mondo = Mondo(&camera);
 
     glEnable(GL_DEPTH_TEST);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     double previousTime = glfwGetTime();
     int frameCount = 0;
-    // render loop
+    //main loop
     while (!glfwWindowShouldClose(window))
     {
         double currentTime = glfwGetTime();
@@ -66,23 +65,23 @@ int main()
         }
 
         processInput(window);
-        ter.generaTerreno();
+        mondo.update();
 
-        // render
-        //fog color = 0.902f, 0.871f, 0.945f
-        //sky color = 0.0f, 0.6f, 0.9f
-        glm::vec3 skyColor = glm::vec3(0.529, 0.808, 0.922);
+        //render
+        //colore nebbia = 0.902f, 0.871f, 0.945f
+        //colore cielo chiaro = 0.0f, 0.6f, 0.9f
+        //colore cielo normale = 0.529, 0.808, 0.922
+        glm::vec3 skyColor = glm::vec3(0.902f, 0.871f, 0.945f);
         glClearColor(skyColor.r,skyColor.g,skyColor.b, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        glUniform3f(glGetUniformLocation(ter.getShader(), "fogColor"), skyColor.r,skyColor.g,skyColor.b);
+        glUniform3f(glGetUniformLocation(mondo.getShader(), "fogColor"), skyColor.r,skyColor.g,skyColor.b);
         //camera update
         camera.Input(window);
         //aggiorna e esporta la matrice della camera al vertex shader
         camera.updateMatrix(50.0f, 0.1f, 500.0f);
 
-        ter.draw();
-        struc.draw(ter.getShader());
+        mondo.draw();
 
         //cambia i buffer
         glfwSwapBuffers(window);
@@ -93,8 +92,7 @@ int main()
     }
 
     //elimina le risorse che non servono più
-    struc.Delete();
-    ter.Delete();
+    mondo.Delete();
 
     glfwTerminate();
     return 0;

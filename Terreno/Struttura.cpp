@@ -1,6 +1,6 @@
 #include "Struttura.h"
 
-Struttura::Struttura(GLuint shader)
+Struttura::Struttura()
 {   
     posizioni = new glm::vec3[numIstanze];
     int max = 600;
@@ -67,7 +67,7 @@ Struttura::Struttura(GLuint shader)
 }
 
 void Struttura::update() {
-
+    
 }
 
 void Struttura::draw(GLuint shader) {

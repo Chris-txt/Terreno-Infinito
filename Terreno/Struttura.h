@@ -5,6 +5,7 @@
 #include <stb/stb_image.h>
 #include <glm/glm.hpp>
 
+//letteralmente la stessa cosa del terreno ma 20 volte più alto e 2 volte più largo
 static GLfloat structureVert[] = {
 //          COORDINATE     /    TexCoord  //
     //+Z
@@ -71,6 +72,8 @@ static GLuint structureInd[] =
     21, 23, 22
 };
 
+//classe responsabile per quei pilsatri di cemento che non fanno niente ma sono belli da vedere
+//forse avrei dovuto chiamarla 'Strutture' con il plurale
 class Struttura
 {
 private:
@@ -81,7 +84,7 @@ private:
 	int numIstanze = 500;
 	glm::vec3* posizioni = nullptr;
 public:
-	Struttura(GLuint shader);
+	Struttura();
 
 	void update();
 	void draw(GLuint shader);

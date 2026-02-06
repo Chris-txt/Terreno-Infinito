@@ -1,17 +1,21 @@
 #include "Terreno.h"
 
-Terreno::Terreno(Camera* mainCamera)
+Terreno::Terreno(Camera* mainCamera, int gridX, int gridZ)
 {
+    this->gridX = gridX;
+    this->gridZ = gridZ;
     this->cam = mainCamera;
     quadAttuale = glm::ivec2{
         floor(cam->Position.x / quadWidth),
         floor(cam->Position.z / quadWidth)
     };
+    
+    numIstanze = gridX * gridZ;
     translations = new glm::vec3[numIstanze];
 
     int index = 0;
-    for (int z = -GRID_Z / 2; z < GRID_Z / 2; ++z) {
-        for (int x = -GRID_X / 2; x < GRID_X / 2; ++x) {
+    for (int z = -gridX / 2; z < gridZ / 2; ++z) {
+        for (int x = -gridX / 2; x < gridZ / 2; ++x) {
             glm::vec3 translation(0.0f);
             translation.x = x * quadWidth;
             translation.z = z * quadWidth;
@@ -96,7 +100,7 @@ void Terreno::generaTerreno()
 
         // Spostamento lungo X
         if (delta.x != 0) {
-            float gridSizeX = GRID_X * quadWidth;
+            float gridSizeX = gridX * quadWidth;
             if (t.x < cam->Position.x - gridSizeX / 2)
                 t.x += gridSizeX;
             else if (t.x > cam->Position.x + gridSizeX / 2)
@@ -105,7 +109,7 @@ void Terreno::generaTerreno()
 
         // Spostamento lungo Z
         if (delta.y != 0) {
-            float gridSizeZ = GRID_Z * quadWidth;
+            float gridSizeZ = gridZ * quadWidth;
             if (t.z < cam->Position.z - gridSizeZ / 2)
                 t.z += gridSizeZ;
             else if (t.z > cam->Position.z + gridSizeZ / 2)
@@ -119,14 +123,11 @@ void Terreno::generaTerreno()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Terreno::draw()
+void Terreno::draw(GLuint shader)
 {
-    ourShader.Activate();
+    glUniform3f(glGetUniformLocation(shader, "camPos"), cam->Position.x, cam->Position.y, cam->Position.z);
 
-    glUniform3f(glGetUniformLocation(ourShader.ID, "camPos"), cam->Position.x, cam->Position.y, cam->Position.z);
-    cam->Matrix(ourShader, "camMatrix");
-
-    glUniform1i(glGetUniformLocation(ourShader.ID, "tex0"), 0);
+    glUniform1i(glGetUniformLocation(shader, "tex0"), 0);
     glBindVertexArray(VAO);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -136,18 +137,12 @@ void Terreno::draw()
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-GLuint Terreno::getShader()
-{
-    return ourShader.ID;
-}
-
 void Terreno::Delete() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &quadVBO);
     glDeleteBuffers(1, &EBO);
     glDeleteBuffers(1, &instanceVBO);
     glDeleteTextures(1, &texture);
-    ourShader.Delete();
 }
 
 Terreno::~Terreno()

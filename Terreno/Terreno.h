@@ -4,6 +4,7 @@
 #include <stb/stb_image.h>
 #include "Camera.h"
 
+//un singolo pezzo del terreno da cui prenderemo riferimento per l'instancing
 static GLfloat vertices[] =
 { //     COORDINATES     /   TexCoord  //
     -5.0f, 0.0f,  5.0f,     0.0f, 1.0f, //in alto a sinistra
@@ -18,30 +19,29 @@ static GLuint indices[] =
     1, 3, 2
 };
 
+//classe che gestisce la pianura di erba infinita
 class Terreno
 {
 private:
-    Shader ourShader = Shader("default.vert", "default.frag");
     unsigned int quadVBO, VAO, EBO;
     unsigned int texture;
-    int quadWidth = 10;
+    const int quadWidth = 10;
     Camera* cam = nullptr;
     glm::ivec2 quadAttuale;
 
-    int GRID_X = 80;
-    int GRID_Z = 80;
-    int numIstanze = GRID_X * GRID_Z;
+    int gridX;
+    int gridZ;
+    int numIstanze;
 
     unsigned int instanceVBO;
     glm::vec3* translations = nullptr;
 public:
-	Terreno(Camera* mainCamera);
+	Terreno(Camera* mainCamera, int gridX, int gridZ);
+
     void generaTerreno();
-
-    void draw();
-    GLuint getShader();
-
+    void draw(GLuint shader);
     void Delete();
+    
     ~Terreno();
 };
 
